@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="shortcut icon" href="zomatologo.png" type="image/x-icon">
+    <title><%= restaurant && restaurant.restaurant ? restaurant.restaurant.name : 'Restaurant Details' %></title>
+</head>
+<body>
+    <div class="top_head">
+    <% if (restaurant && restaurant.restaurant) { %>
+        <h1 style="font-family: Georgia, Times, serif;"><%= restaurant.restaurant.name %></h1>
+        <center>
+        <% if (restaurant.restaurant.featured_image) { %>
+            <img src="<%= restaurant.restaurant.featured_image %>" alt="<%= restaurant.restaurant.name %>" width="50%"
+            top="0%">
+        <% } %></center>
+        <p><strong>Cuisines:</strong><button type="button"><%= restaurant.restaurant.cuisines %></button></p>
+        <p><strong>Address:</strong> 
+            <button type="button" class="btn_btn-primary" style="background-color: red; color: whitesmoke;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=<%= encodeURIComponent(restaurant.restaurant.location.address) %>', '_blank')">
+                <!-- <%= restaurant.restaurant.location.address %> -->navigate
+            </button>
+        </p>
+            <p><strong>City:</strong> <%= restaurant.restaurant.location.city %></p>
+            <p><strong>Country ID:</strong> <%= restaurant.restaurant.location.country_id %></p>
+    </div>
+    <br>
+    <div class="rest_details">
+    <div class="row">
+        <div class="col-sm-6">
+            
+            <p><strong>Locality:</strong> <%= restaurant.restaurant.location.locality %></p>
+            <p><strong>Latitude:</strong> <%= restaurant.restaurant.location.latitude %></p>
+            <p><strong>Longitude:</strong> <%= restaurant.restaurant.location.longitude %></p>
+            <p><strong>Zipcode:</strong> <%= restaurant.restaurant.location.zipcode %></p>
+            
+            <p><strong>Average Cost for Two:</strong> <%= restaurant.restaurant.currency %> <%= restaurant.restaurant.average_cost_for_two %></p>
+            <p><strong>Price Range:</strong> <%= restaurant.restaurant.price_range %></p>
+            <p><strong>Rating:</strong> <%= restaurant.restaurant.user_rating.aggregate_rating %> (<%= restaurant.restaurant.user_rating.votes %> votes)</p>
+            <p><strong>Rating Text:</strong> <%= restaurant.restaurant.user_rating.rating_text %></p>
+            <!-- <p><strong>Rating Color:</strong> <%= restaurant.restaurant.user_rating.rating_color %></p> -->
+        </div>
+        <div class="col-sm-6">
+            <p><strong>Has Online Delivery:</strong> <%= restaurant.restaurant.has_online_delivery ? 'Yes' : 'No' %></p>
+            <p><strong>Is Delivering Now:</strong> <%= restaurant.restaurant.is_delivering_now ? 'Yes' : 'No' %></p>
+            <p><strong>Has Table Booking:</strong> <%= restaurant.restaurant.has_table_booking ? 'Yes' : 'No' %></p>
+            <!-- <p><strong>Menu URL:</strong> <a href="<%= restaurant.restaurant.menu_url %>">Menu</a></p> -->
+            <p><strong>Menu URL:</strong> <button id="menu-url-button" class="btn_btn-primary">Menu</button></p>          <!-- <p><strong>Book URL:</strong> <a href="<%= restaurant.restaurant.book_url %>">Book a Table</a></p> -->
+            <p><strong>Book URL:</strong> <button id="book-url-button" class="btn_btn-primary">Book a restaurent</button></p>
+            <!-- <p><strong>Events URL:</strong> <a href="<%= restaurant.restaurant.events_url %>">Events</a></p> -->
+            <p><strong>Events URL:</strong> <button id="events-url-button" class="btn_btn-primary">Search for an event</button></p>
+            <p><strong>Deeplink:</strong> <%= restaurant.restaurant.deeplink %></p>
+        </div>
+    </div></div>
+    
+        
+
+        
+
+        <h2>Events:</h2>
+        <% if (restaurant.restaurant.zomato_events && restaurant.restaurant.zomato_events.length > 0) { %>
+            <% restaurant.restaurant.zomato_events.forEach(event => { %>
+                <div class="event">
+                    <h3><%= event.event.title %></h3>
+                    <p><strong>Date:</strong> <%= event.event.display_date %></p>
+                    <p><strong>Time:</strong> <%= event.event.display_time %></p>
+                    <p><strong>Description:</strong> <%= event.event.description %></p>
+                    <% if (event.event.photos && event.event.photos.length > 0) { %>
+                        <div class="event-photos">
+                            <% event.event.photos.forEach(photo => { %>
+                                <img src="<%= photo.photo.url %>" alt="Event Photo">
+                            <% }) %>
+                        </div>
+                    <% } %>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>No events available</p>
+        <% } %>
+        
+        <a href="/">Back to list</a>
+    <% } else { %>
+        <p>Restaurant details not available.</p>
+    <% } %>
+    <script>
+        document.getElementById('menu-url-button').addEventListener('click', function() {
+            window.location.href = "<%= restaurant.restaurant.menu_url %>";
+        });
+        document.getElementById('book-url-button').addEventListener('click', function() {
+            window.location.href = "<%= restaurant.restaurant.book_url %>";
+        });
+        document.getElementById('event-url-button').addEventListener('click', function() {
+            window.location.href = "<%= restaurant.restaurant.event_url %>";
+        });
+    </script>
+</body>
+</html>

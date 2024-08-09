@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="shortcut icon" href="zomatologo.png" type="image/x-icon">
+    <title>Restaurants</title>
+</head>
+<body>
+    <div class="head_zomato">
+    <center><h1>Zomato</h1>
+        <h5>Discover the best food & drinks near By</h5>
+        <form action="/search" method="get" class="search-form">
+            <input type="text" name="query" placeholder="Search by ID or Name..." value="<%= query || '' %>">
+            <button type="submit">Search</button>
+        </form></center></div>
+        <br>
+    <main>
+        <div class="restaurant-list">
+            <% if (restaurants.length > 0) { %>
+                <% restaurants.forEach(restaurant => { %>
+                    <div class="restaurant">
+                        <% if (restaurant.restaurant.featured_image) { %>
+                            <img src="<%= restaurant.restaurant.featured_image %>" alt="<%= restaurant.restaurant.name %>">
+                        <% } else { %>
+                            <p>No image available</p>
+                        <% } %>
+                        <h2><a href="/restaurant/<%= restaurant.restaurant.id %>"><%= restaurant.restaurant.name %></a></h2>
+                        <div class="rating">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <p><%= restaurant.restaurant.location.address %></p>
+                                </div>
+                                <div class="col-sm-2">
+                                    <p id="rating" style="color: antiquewhite; background-color: #<%= restaurant.restaurant.user_rating.rating_color %>;"><%= restaurant.restaurant.user_rating.aggregate_rating%></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>No results found.</p>
+            <% } %>
+        </div>
+        <div id="pagination-controls">
+            <% for (let i = 1; i <= totalPages && i <= 10; i++) { %>
+                <a href="/search?query=<%= query %>&page=<%= i %>" class="page-button <%= i === page ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+        </div>
+    </main>
+</body>
+</html>
+
